@@ -44,7 +44,7 @@ app.get('/todos', async (req, res) => {
 
 app.get("/rep", async (req, res) => {
   try {
-      const allTodos = await pool1.query('SELECT * FROM projeto  ')
+      const allTodos = await pool1.query('select * from public.pedidos_rep  ')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
