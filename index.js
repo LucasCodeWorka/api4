@@ -7,12 +7,13 @@ const cors = require('cors');
 const { format } = require('date-fns');
 
 
+
 const pool = new Pool({
-    'user': 'erick.rodrigues',
-    'password': 'Hq2iNW4eCLjc',
-    'host': 'ep-rough-wave-13168438.us-east-2.aws.neon.tech',
-    'port': '5432',
-    'database': 'liebeti',
+  user: 'LucasCodeWorka',
+  password: 'IO24VirZxBgc',
+  host: 'ep-weathered-king-a59769hv.us-east-2.aws.neon.tech',
+  port: '5432',
+  database: 'liebe',
   ssl: {
     rejectUnauthorized: false,
     sslmode: 'require'
@@ -31,7 +32,7 @@ app.use(cors());
 app.get('/todos', async (req, res) => {
   try {
     const client = await pool1.connect();
-    const result = await client.query('SELECT * FROM projeto ');
+    const result = await client.query('select * from public.vendas_rep ');
     const data = result.rows;
     client.release();
     res.json(data);
