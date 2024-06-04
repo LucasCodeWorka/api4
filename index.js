@@ -53,7 +53,7 @@ app.get("/rep", async (req, res) => {
 
 app.get("/cli", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.cli_rep  ')
+      const allTodos = await pool1.query('select * from public.cli_rep limit 1000  ')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
