@@ -51,7 +51,7 @@ app.get("/rep", async (req, res) => {
   }
 })
 
-app.get("/rep", async (req, res) => {
+app.get("/prod", async (req, res) => {
   try {
       const allTodos = await pool1.query('select * from public.prod_rep  ')
       res.json(allTodos.rows)
