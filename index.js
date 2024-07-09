@@ -62,7 +62,7 @@ app.get("/prod", async (req, res) => {
 
 app.get("/comis", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.comis_rep where dt_emissao >= '2024-06-01' and dt_emissao <= '2024-07-31' ')
+      const allTodos = await pool1.query('select * from public.comis_rep where dt_emissao >= '2024-06-01'')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
@@ -72,7 +72,7 @@ app.get("/comis", async (req, res) => {
 
 app.get("/inad", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.inad_rep where dt_emissao >= '2024-06-01' and dt_emissao <= '2024-07-31'  ')
+      const allTodos = await pool1.query('select * from public.inad_rep')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
