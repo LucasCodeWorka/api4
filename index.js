@@ -53,7 +53,7 @@ app.get("/rep", async (req, res) => {
 
 app.get("/prod", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.prod_rep  ')
+      const allTodos = await pool1.query('select * from prod_rep')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
@@ -81,7 +81,7 @@ app.get("/inad", async (req, res) => {
 
 app.get("/cli", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.cli_rep')
+      const allTodos = await pool1.query('select * from cli_rep')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
