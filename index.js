@@ -53,7 +53,7 @@ app.get("/rep", async (req, res) => {
 
 app.get("/prod", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from prod_rep')
+      const allTodos = await pool1.query('select * from public.prod_rep  ')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
@@ -62,7 +62,7 @@ app.get("/prod", async (req, res) => {
 
 app.get("/comis", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.comis2'')
+      const allTodos = await pool1.query('select * from public.comis_rep  ')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
@@ -72,7 +72,7 @@ app.get("/comis", async (req, res) => {
 
 app.get("/inad", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.inad_rep')
+      const allTodos = await pool1.query('select * from public.inad_rep  ')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
@@ -81,7 +81,7 @@ app.get("/inad", async (req, res) => {
 
 app.get("/cli", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from cli_rep limit 1000')
+      const allTodos = await pool1.query('select * from public.cli_rep limit 1000  ')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
