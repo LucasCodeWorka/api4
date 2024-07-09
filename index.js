@@ -62,7 +62,7 @@ app.get("/prod", async (req, res) => {
 
 app.get("/comis", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.comis_rep where dt_emissao >= '2024-06-01'')
+      const allTodos = await pool1.query('select * from public.comis_rep'')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
