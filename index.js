@@ -72,7 +72,7 @@ app.get("/comis", async (req, res) => {
 
 app.get("/inad", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.inad_rep limit 100')
+      const allTodos = await pool1.query('select * from public.inad_rep')
       res.json(allTodos.rows)
   } catch (err) {
       console.error(err.message)
