@@ -6,8 +6,6 @@ const querystring = require('querystring');
 const cors = require('cors');
 const { format } = require('date-fns');
 
-
-
 const pool = new Pool({
   user: 'LucasCodeWorka',
   password: 'IO24VirZxBgc',
@@ -20,14 +18,11 @@ const pool = new Pool({
   }
 });
 
-
 const app = express();
 const port = 3001; // Escolha a porta que desejar
 
 app.use(express.json());
-
 app.use(cors());
-
 
 app.get('/todos', async (req, res) => {
   try {
@@ -49,7 +44,7 @@ app.get("/rep", async (req, res) => {
   } catch (err) {
       console.error(err.message)
   }
-})
+});
 
 app.get("/prod", async (req, res) => {
   try {
@@ -58,7 +53,7 @@ app.get("/prod", async (req, res) => {
   } catch (err) {
       console.error(err.message)
   }
-})
+});
 
 app.get("/comis", async (req, res) => {
   try {
@@ -67,8 +62,7 @@ app.get("/comis", async (req, res) => {
   } catch (err) {
       console.error(err.message)
   }
-})
-
+});
 
 app.get("/inad", async (req, res) => {
   try {
@@ -77,57 +71,61 @@ app.get("/inad", async (req, res) => {
   } catch (err) {
       console.error(err.message)
   }
-})
+});
 
+// Atualize a rota /cli para aceitar um parâmetro de consulta
 app.get("/cli", async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.cli_rep')
-      res.json(allTodos.rows)
+      const { cd_representant } = req.query;
+      let query = 'SELECT * FROM public.cli_rep';
+      const params = [];
+
+      if (cd_representant) {
+        query += ' WHERE cd_representant = $1';
+        params.push(cd_representant);
+      }
+
+      const allTodos = await pool1.query(query, params);
+      res.json(allTodos.rows);
   } catch (err) {
-      console.error(err.message)
+      console.error(err.message);
+      res.status(500).json({ error: 'Erro interno do servidor' });
   }
-})
+});
 
 app.get("/todos/:id", async (req, res) => {
   try {
       const { id } = req.params;
-      const todo = await pool1.query("SELECT * FROM projeto WHERE id = $1  ", [id])
-  
-      res.json(todo.rows[0])
+      const todo = await pool1.query("SELECT * FROM projeto WHERE id = $1  ", [id]);
+      res.json(todo.rows[0]);
   } catch (err) {
-      console.err(err.message);
+      console.error(err.message);
   }
-  })
+});
 
+// API do rep
+app.get('/repri', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM public.vr_pes_reprcliente ');
+    const data = result.rows;
+    client.release();
+    res.json(data);
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
 
-  //API do rep
-
-  app.get('/repri', async (req, res) => {
-    try {
-      const client = await pool.connect();
-      const result = await client.query('SELECT * FROM public.vr_pes_reprcliente ');
-      const data = result.rows;
-      client.release();
-      res.json(data);
-    } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
-  });
-
-  app.get("/repri/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const todo = await pool.query("SELECT * FROM public.vr_pes_reprcliente WHERE cd_cliente = $1  ", [id])
-    
-        res.json(todo.rows[0])
-    } catch (error) {
-        console.error(error.message);
-    }
-    })
-  
-  
-
+app.get("/repri/:id", async (req, res) => {
+  try {
+      const { id } = req.params;
+      const todo = await pool.query("SELECT * FROM public.vr_pes_reprcliente WHERE cd_cliente = $1  ", [id]);
+      res.json(todo.rows[0]);
+  } catch (error) {
+      console.error(error.message);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Servidor backend rodando na porta ${port}`);
