@@ -1,11 +1,12 @@
 const express = require('express');
-const axios = require('axios');
-const pool1 = require("./db");
-const { Pool } = require("pg");
-const querystring = require('querystring');
 const cors = require('cors');
+const axios = require('axios');
+const { Pool } = require('pg');
+const pool1 = require("./db");
+const querystring = require('querystring');
 const { format } = require('date-fns');
 
+// Configuração do pool de conexão com o PostgreSQL
 const pool = new Pool({
   user: 'LucasCodeWorka',
   password: 'IO24VirZxBgc',
@@ -22,12 +23,13 @@ const app = express();
 const port = 3001; // Escolha a porta que desejar
 
 app.use(express.json());
-app.use(cors());
+app.use(cors()); // Habilita CORS para todas as rotas
 
+// Rota para obter todos os dados da tabela 'vendas_rep'
 app.get('/todos', async (req, res) => {
   try {
     const client = await pool1.connect();
-    const result = await client.query('select * from public.vendas_rep ');
+    const result = await client.query('SELECT * FROM public.vendas_rep');
     const data = result.rows;
     client.release();
     res.json(data);
@@ -37,77 +39,82 @@ app.get('/todos', async (req, res) => {
   }
 });
 
-app.get("/rep", async (req, res) => {
+// Rota para obter todos os dados da tabela 'pedidos2_rep'
+app.get('/rep', async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.pedidos2_rep  ')
-      res.json(allTodos.rows)
+    const allTodos = await pool1.query('SELECT * FROM public.pedidos2_rep');
+    res.json(allTodos.rows);
   } catch (err) {
-      console.error(err.message)
+    console.error(err.message);
   }
 });
 
-app.get("/prod", async (req, res) => {
+// Rota para obter todos os dados da tabela 'prod_rep'
+app.get('/prod', async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.prod_rep  ')
-      res.json(allTodos.rows)
+    const allTodos = await pool1.query('SELECT * FROM public.prod_rep');
+    res.json(allTodos.rows);
   } catch (err) {
-      console.error(err.message)
+    console.error(err.message);
   }
 });
 
-app.get("/comis", async (req, res) => {
+// Rota para obter todos os dados da tabela 'comis2'
+app.get('/comis', async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from comis2  ')
-      res.json(allTodos.rows)
+    const allTodos = await pool1.query('SELECT * FROM comis2');
+    res.json(allTodos.rows);
   } catch (err) {
-      console.error(err.message)
+    console.error(err.message);
   }
 });
 
-app.get("/inad", async (req, res) => {
+// Rota para obter todos os dados da tabela 'inad_rep'
+app.get('/inad', async (req, res) => {
   try {
-      const allTodos = await pool1.query('select * from public.inad_rep  ')
-      res.json(allTodos.rows)
+    const allTodos = await pool1.query('SELECT * FROM public.inad_rep');
+    res.json(allTodos.rows);
   } catch (err) {
-      console.error(err.message)
+    console.error(err.message);
   }
 });
 
-// Atualize a rota /cli para aceitar um parâmetro de consulta
-app.get("/cli", async (req, res) => {
+// Rota para obter dados da tabela 'cli_rep' com parâmetro de consulta opcional
+app.get('/cli', async (req, res) => {
   try {
-      const { cd_representant } = req.query;
-      let query = 'SELECT * FROM public.cli_rep';
-      const params = [];
+    const { cd_representant } = req.query;
+    let query = 'SELECT * FROM public.cli_rep';
+    const params = [];
 
-      if (cd_representant) {
-        query += ' WHERE cd_representant = $1';
-        params.push(cd_representant);
-      }
+    if (cd_representant) {
+      query += ' WHERE cd_representant = $1';
+      params.push(cd_representant);
+    }
 
-      const allTodos = await pool1.query(query, params);
-      res.json(allTodos.rows);
+    const allTodos = await pool1.query(query, params);
+    res.json(allTodos.rows);
   } catch (err) {
-      console.error(err.message);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error(err.message);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
-app.get("/todos/:id", async (req, res) => {
+// Rota para obter um registro específico da tabela 'projeto' por ID
+app.get('/todos/:id', async (req, res) => {
   try {
-      const { id } = req.params;
-      const todo = await pool1.query("SELECT * FROM projeto WHERE id = $1  ", [id]);
-      res.json(todo.rows[0]);
+    const { id } = req.params;
+    const todo = await pool1.query('SELECT * FROM projeto WHERE id = $1', [id]);
+    res.json(todo.rows[0]);
   } catch (err) {
-      console.error(err.message);
+    console.error(err.message);
   }
 });
 
-// API do rep
+// Rota para obter todos os dados da tabela 'vr_pes_reprcliente'
 app.get('/repri', async (req, res) => {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public.vr_pes_reprcliente ');
+    const result = await client.query('SELECT * FROM public.vr_pes_reprcliente');
     const data = result.rows;
     client.release();
     res.json(data);
@@ -117,13 +124,14 @@ app.get('/repri', async (req, res) => {
   }
 });
 
-app.get("/repri/:id", async (req, res) => {
+// Rota para obter um registro específico da tabela 'vr_pes_reprcliente' por ID
+app.get('/repri/:id', async (req, res) => {
   try {
-      const { id } = req.params;
-      const todo = await pool.query("SELECT * FROM public.vr_pes_reprcliente WHERE cd_cliente = $1  ", [id]);
-      res.json(todo.rows[0]);
+    const { id } = req.params;
+    const todo = await pool.query('SELECT * FROM public.vr_pes_reprcliente WHERE cd_cliente = $1', [id]);
+    res.json(todo.rows[0]);
   } catch (error) {
-      console.error(error.message);
+    console.error(error.message);
   }
 });
 
