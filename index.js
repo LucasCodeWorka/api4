@@ -77,30 +77,22 @@ app.get('/inad', async (req, res) => {
   }
 });
 
-app.get('/cli', async (req, res) => {
+app.get("/cli", async (req, res) => {
   try {
-    const { cd_representant } = req.query;
-    const page = parseInt(req.query.page) || 1; // Página atual, default para 1
-    const limit = parseInt(req.query.limit) || 30; // Itens por página, default para 30
-    const offset = (page - 1) * limit; // Cálculo do offset
+      const { cd_representant } = req.query;
+      let query = 'SELECT * FROM public.cli_rep';
+      const params = [];
 
-    let query = 'SELECT * FROM public.cli_rep';
-    const params = [];
+      if (cd_representant) {
+        query += ' WHERE cd_representant = $1';
+        params.push(cd_representant);
+      }
 
-    if (cd_representant) {
-      query += ' WHERE cd_representant = $1';
-      params.push(cd_representant);
-    }
-
-    // Adicionando LIMIT e OFFSET à query
-    query += ' LIMIT $2 OFFSET $3';
-    params.push(limit, offset);
-
-    const allTodos = await pool1.query(query, params);
-    res.json(allTodos.rows);
+      const allTodos = await pool1.query(query, params);
+      res.json(allTodos.rows);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error(err.message);
+      res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 
