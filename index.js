@@ -47,6 +47,16 @@ app.get('/rep', async (req, res) => {
   }
 });
 
+app.get('/estoque', async (req, res) => {
+  try {
+    const allTodos = await pool1.query('SELECT * FROM estoque');
+    res.json(allTodos.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 app.get('/prod', async (req, res) => {
   try {
     const allTodos = await pool1.query('SELECT * FROM public.prod_rep');
